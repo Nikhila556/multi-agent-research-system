@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+venv/
+.venv/
+
+# Build artifacts
+build/
+*.egg-info/
+
+# Environment / secrets
+.env
+
+# SQLite
+*.db
+*.db-shm
+*.db-wal
+
+# Output files
+output/
+
+# OS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
