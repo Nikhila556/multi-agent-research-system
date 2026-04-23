@@ -19,9 +19,8 @@ Sections
 # ─────────────────────────────────────────────────────────────────────────────
 # 1. OpenAI LLM
 # ─────────────────────────────────────────────────────────────────────────────
-
-OPENAI_API_KEY: str = "your open-ai key"
-"""OpenAI API key. Get yours at https://platform.openai.com/api-keys"""
+import os
+OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")
 
 OPENAI_MODEL: str = "gpt-4o"
 """OpenAI model ID.
@@ -35,7 +34,7 @@ Recommended options:
 # 2. Tavily Search
 # ─────────────────────────────────────────────────────────────────────────────
 
-TAVILY_API_KEY: str = "your tavily-api key"
+TAVILY_API_KEY: str = os.getenv("TAVILY_API_KEY", "")
 """Tavily API key. Get yours at https://tavily.com"""
 
 TAVILY_SEARCH_DEPTH: str = "basic"
