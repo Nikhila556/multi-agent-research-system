@@ -23,13 +23,14 @@ Run
 
 import asyncio
 import logging
+import os
 import sys
 import uuid
 from dataclasses import dataclass, field
 from typing import Any
 
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import JSONResponse
+from fastapi.responses import FileResponse, JSONResponse
 from langgraph.types import Command
 from pydantic import BaseModel
 
@@ -252,6 +253,30 @@ async def get_status(session_id: str) -> dict:
         response["error"] = info.error
 
     return response
+
+
+@app.get("/research/{session_id}/download")
+async def download_output(session_id: str) -> FileResponse:
+    """Download the output file for a completed research session."""
+    info = _sessions.get(session_id)
+    if not info:
+        raise HTTPException(status_code=404, detail="Session not found.")
+
+    if info.status != "complete":
+        raise HTTPException(
+            status_code=400,
+            detail=f"Session is not complete yet (current status: {info.status}).",
+        )
+
+    output_path = info.result.get("output_path", "") if info.result else ""
+    if not output_path or not os.path.isfile(output_path):
+        raise HTTPException(status_code=404, detail="Output file not found.")
+
+    return FileResponse(
+        path=output_path,
+        filename=os.path.basename(output_path),
+        media_type="application/octet-stream",
+    )
 
 
 @app.post("/research/{session_id}/review")
